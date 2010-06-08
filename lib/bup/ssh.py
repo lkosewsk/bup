@@ -1,7 +1,7 @@
 import os, re, subprocess
 from bup import helpers
 
-def connect(rhost, subcmd):
+def connect(rhost, subcmd, rport=None):
     assert(not re.search(r'[^\w-]', subcmd))
     main_exe = os.environ.get('BUP_MAIN_EXE') or sys.argv[0]
     nicedir = os.path.split(os.path.abspath(main_exe))[0]
@@ -23,7 +23,10 @@ def connect(rhost, subcmd):
         cmd = r"""
                    sh -c PATH=%s:'$PATH BUP_FORCE_TTY=%s bup %s'
                """ % (escapedir, force_tty, subcmd)
-        argv = ['ssh', rhost, '--', cmd.strip()]
+        argv = ['ssh', rhost]
+        if rport:
+            argv += ['-p', rport]
+        argv += ['--', cmd.strip()]
         #helpers.log('argv is: %r\n' % argv)
     def setup():
         # runs in the child process

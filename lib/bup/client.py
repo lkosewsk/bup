@@ -33,7 +33,7 @@ def _raw_write_bwlimit(f, buf, bwcount, bwtime):
                        
 
 class Client:
-    def __init__(self, remote, create=False):
+    def __init__(self, remote, port=None, create=False):
         self._busy = self.conn = self.p = self.pout = self.pin = None
         is_reverse = os.environ.get('BUP_SERVER_REVERSE')
         if is_reverse:

@@ -5,10 +5,12 @@ from bup.helpers import *
 from subprocess import PIPE
 
 
+# FIXME:  Is the default port taken from /etc/services?
 optspec = """
 bup split [-tcb] [-n name] [--bench] [filenames...]
 --
 r,remote=  remote repository path
+p,port=    ssh port on remote (default: 22)
 b,blobs    output a series of blob ids
 t,tree     output a tree id
 c,commit   output a commit id
@@ -57,7 +59,7 @@ refname = opt.name and 'refs/heads/%s' % opt.name or None
 if opt.noop or opt.copy:
     cli = pack_writer = oldref = None
 elif opt.remote or is_reverse:
-    cli = client.Client(opt.remote)
+    cli = client.Client(opt.remote, opt.port)
     oldref = refname and cli.read_ref(refname) or None
     pack_writer = cli.new_packwriter()
 else:
